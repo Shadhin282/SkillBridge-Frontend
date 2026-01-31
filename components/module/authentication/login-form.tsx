@@ -2,18 +2,32 @@
 
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { authClient } from '@/lib/auth-client';
+import { authClient} from '@/lib/auth-client';
 import { ArrowRight, Chrome } from 'lucide-react';
 import Link from 'next/link';
-import React from 'react';
+import { useRouter } from 'next/navigation';
+import React, { FormEvent } from 'react';
 
 const LoginForm = () => {
+    const router = useRouter();
+    
+    const handleLogin = async (e: FormEvent<HTMLFormElement>)=>{
+            e.preventDefault()
+            const data =  e.target;
+            
+          
+            const { data, error } = await authClient.signIn.email();
+    }
+
     const handleSocialLogin = async ()=>{
         const data = await authClient.signIn.social({
     provider: "google",
-    callbackURL: process.env.FRONTEND_API
+    callbackURL: "http://localhost:3000",
   });
     }
+
+    const session = authClient.useSession()
+    console.log("session from client ",session)
     return (
         <div className="w-full max-w-2xl mx-auto text-center grid grid-cols-1  gap-8 lg:gap-12">
         {/* Left Column - Form */}
@@ -31,10 +45,11 @@ const LoginForm = () => {
             </div>
 
             {/* Form */}
-            <form  className="space-y-4">
+            <form onSubmit={(e)=>handleLogin(e)} className="space-y-4">
               <div className="space-y-2">
                 <Input
                   type="email"
+                  name="email"
                   placeholder="Phone / Email / ArtistID"
                 //   value={email}
                 //   onChange={(e) => setEmail(e.target.value)}
@@ -45,6 +60,7 @@ const LoginForm = () => {
 
               <div className="space-y-2">
                 <Input
+                name="password"
                   type="password"
                   placeholder="Passcode"
                 //   value={password}

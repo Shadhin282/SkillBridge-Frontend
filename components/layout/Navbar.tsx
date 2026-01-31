@@ -1,15 +1,28 @@
-'use client';
+'use client'
 
 import { useState } from 'react';
 import Link from 'next/link';
-import { BarChart3, BookOpen, LayoutDashboard, Menu, Users, X } from 'lucide-react';
+import { BarChart3, BookOpen, LayoutDashboard, Menu, Users } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar';
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
+import { authClient } from '@/lib/auth-client';
+import { redirect } from 'next/navigation';
 
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
 
+
+
+  const handleSignOut = async ()=>{
+    await authClient.signOut({
+      fetchOptions: {
+        onSuccess: () => {
+          redirect("/login"); // redirect to login page
+        },
+      },
+    });
+  }
   const navItems = [
     { label: 'Browse Tutors', href: '/tutors' },
     { label: 'Dashboard', href: '/dashboard' },
@@ -126,6 +139,7 @@ export default function Navbar() {
             <Button
               variant="ghost"
               className="text-sm text-gray-600 hover:text-gray-900"
+              onClick={handleSignOut}
             >
               Logout
             </Button>
