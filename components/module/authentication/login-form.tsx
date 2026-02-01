@@ -18,6 +18,7 @@ const LoginForm = () => {
             const loginData = {email : email.value,
                 password : password.value,
             }
+            console.log(loginData)
             const { data,error } = await authClient.signIn.email(loginData);
 
             if(error ){

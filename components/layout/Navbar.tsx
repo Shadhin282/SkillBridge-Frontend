@@ -1,36 +1,53 @@
-'use client'
 
-import { useState } from 'react';
-import Link from 'next/link';
-import { BarChart3, BookOpen, LayoutDashboard, Menu, Users } from 'lucide-react';
-import { Button } from '@/components/ui/button';
-import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar';
-import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
-import { authClient } from '@/lib/auth-client';
-import { redirect } from 'next/navigation';
+// import { useState } from "react";
+import Link from "next/link";
+import {
+  BarChart3,
+  BookOpen,
+  LayoutDashboard,
+  Menu,
+  Users,
+} from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
+import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
+// import { authClient } from "@/lib/auth-client";
+// import { redirect } from "next/navigation";
+import { userService } from "@/services/user.service";
+import NavbarClient from "./NavbarClient";
 
-export default function Navbar() {
-  const [isOpen, setIsOpen] = useState(false);
+export default async function Navbar() {
+  // const [isOpen, setIsOpen] = useState(false);
 
+  // const { data } = authClient.useSession();
+  // const { user } = data || {};
+    const { data } = await userService.getSession();
 
-
-  const handleSignOut = async ()=>{
-    await authClient.signOut({
-      fetchOptions: {
-        onSuccess: () => {
-          redirect("/login"); // redirect to login page
-        },
-      },
-    });
-  }
+    const user = data?.user;
+    console.log(user)
+  // const handleSignOut = async () => {
+  //   await authClient.signOut({
+  //     fetchOptions: {
+  //       onSuccess: () => {
+  //         redirect("/login"); // redirect to login page
+  //       },
+  //     },
+  //   });
+  // };
   const navItems = [
-    { label: 'Browse Tutors', href: '/tutors' },
-    { label: 'Dashboard', href: '/dashboard' },
-    { label: 'My Bookings', href: '/dashboard/bookings' },
-    { label: 'TDashboard', href: '/tutor/dashboard', icon:"LayoutDashboard" },
-    { label: 'Availability', href: '/tutor/availability', icon:"BookOpen" },
-    { label: 'Overview', href: '/admin', icon: 'chart' },
-    { label: 'Users', href: '/admin/users', icon: 'users' },
+    { label: "Browse Tutors", href: "/tutors" },
+    ...(user?.role === "STUDENT" ? [
+      { label: "Dashboard", href: "/dashboard" },
+      { label: "My Bookings", href: "/dashboard/bookings" },
+    ] : []),
+    ...(user?.role === "TUTOR" ? [
+      { label: "TDashboard", href: "/tutor/dashboard", icon: "LayoutDashboard" },
+      { label: "Availability", href: "/tutor/availability", icon: "BookOpen" },
+    ] : []),
+    ...(user?.role === "ADMIN" ? [
+      { label: "Overview", href: "/admin", icon: "chart" },
+      { label: "Users", href: "/admin/users", icon: "users" },
+    ] : []),
   ];
 
   return (
@@ -65,7 +82,7 @@ export default function Navbar() {
                 href={item.href}
                 className="flex items-center gap-2 text-gray-600 hover:text-gray-900 transition-colors text-sm"
               >
-                {item.label === 'Browse Tutors' && (
+                {item.label === "Browse Tutors" && (
                   <svg
                     className="w-5 h-5"
                     fill="none"
@@ -80,7 +97,7 @@ export default function Navbar() {
                     />
                   </svg>
                 )}
-                {item.label === 'Dashboard' && (
+                {item.label === "Dashboard" && (
                   <svg
                     className="w-5 h-5"
                     fill="none"
@@ -95,7 +112,7 @@ export default function Navbar() {
                     />
                   </svg>
                 )}
-                {item.label === 'My Bookings' && (
+                {item.label === "My Bookings" && (
                   <svg
                     className="w-5 h-5"
                     fill="none"
@@ -113,15 +130,9 @@ export default function Navbar() {
                 {item.icon === "LayoutDashboard" && (
                   <LayoutDashboard className="w-5 h-5" />
                 )}
-                {item.icon === 'BookOpen' && (
-                  <BookOpen className="w-5 h-5" />
-                )}
-                 {item.icon === 'chart' && (
-                  <BarChart3 className="w-5 h-5" />
-                )}
-                {item.icon === 'users' && (
-                  <Users className="w-5 h-5" />
-                )}
+                {item.icon === "BookOpen" && <BookOpen className="w-5 h-5" />}
+                {item.icon === "chart" && <BarChart3 className="w-5 h-5" />}
+                {item.icon === "users" && <Users className="w-5 h-5" />}
                 {item.label}
               </Link>
             ))}
@@ -129,31 +140,14 @@ export default function Navbar() {
 
           {/* Desktop User Section */}
           <div className="hidden md:flex items-center gap-4">
-            <div className="flex items-center gap-3">
-              <Avatar className="w-9 h-9">
-                <AvatarImage src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&h=400&fit=crop" />
-                <AvatarFallback>AJ</AvatarFallback>
-              </Avatar>
-              <span className="text-sm font-medium text-gray-900">Alex Johnson</span>
-            </div>
-            <Button
-              variant="ghost"
-              className="text-sm text-gray-600 hover:text-gray-900"
-              onClick={handleSignOut}
-            >
-              Logout
-            </Button>
+            <NavbarClient user={user}></NavbarClient>
+            
 
-            <Link href="/login">
-                                    <Button variant="ghost">Login</Button>
-                                </Link>
-                                <Link href="/register">
-                                    <Button className='btn bg-black text-white'>Get Started</Button>
-                                </Link>
+            
           </div>
 
           {/* Mobile Menu Button */}
-          <Sheet open={isOpen} onOpenChange={setIsOpen}>
+          <Sheet >
             <SheetTrigger asChild className="md:hidden">
               <Button variant="ghost" size="icon">
                 <Menu className="w-6 h-6" />
@@ -177,7 +171,9 @@ export default function Navbar() {
                       />
                     </svg>
                   </div>
-                  <span className="text-lg font-bold text-gray-900">SkillBridge</span>
+                  <span className="text-lg font-bold text-gray-900">
+                    SkillBridge
+                  </span>
                 </Link>
                 <nav className="flex flex-col gap-4">
                   {navItems.map((item) => (
@@ -185,20 +181,21 @@ export default function Navbar() {
                       key={item.href}
                       href={item.href}
                       className="text-gray-600 hover:text-gray-900 transition-colors"
-                      onClick={() => setIsOpen(false)}
+                      // onClick={() => setIsOpen(false)}
                     >
                       {item.label}
                     </Link>
                   ))}
                 </nav>
                 <div className="border-t flex flex-col pt-4 mt-4">
-                  
                   <div className="flex items-center gap-3 mb-4">
                     <Avatar className="w-10 h-10">
                       <AvatarImage src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&h=400&fit=crop" />
                       <AvatarFallback>AJ</AvatarFallback>
                     </Avatar>
-                    <span className="text-sm font-medium text-gray-900">Alex Johnson</span>
+                    <span className="text-sm font-medium text-gray-900">
+                      Alex Johnson
+                    </span>
                   </div>
                   <Button
                     variant="ghost"
@@ -206,16 +203,13 @@ export default function Navbar() {
                   >
                     Logout
                   </Button>
-                  
-                  
-                    <Link href="/login">
-                                    <Button variant="ghost">Login</Button>
-                                </Link>
-                                <Link href="/register">
-                                    <Button>Get Started</Button>
-                                </Link>
-                  
-                  
+
+                  <Link href="/login">
+                    <Button variant="ghost">Login</Button>
+                  </Link>
+                  <Link href="/register">
+                    <Button>Get Started</Button>
+                  </Link>
                 </div>
               </div>
             </SheetContent>
