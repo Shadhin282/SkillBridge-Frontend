@@ -2,19 +2,14 @@ import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { Search, CheckCircle, ArrowRight } from 'lucide-react';
 import { Input } from "@/components/ui/input";
-import { cookies } from "next/headers";
-// import { authClient } from "@/lib/auth-client";
+import { userService } from "@/services/user.service";
+
 
 export default async function Home() {
-    // const session =  await authClient.getSession()
-    const cookieStore = await cookies()
-    const res = await fetch("http://localhost:5000/api/auth/get-session",{
-      headers : {
-        Cookie : cookieStore.toString(),
-      }
-    });
-    const session = await res.json()
-    console.log(session)
+   
+   const {data} = await userService.getSession();
+   console.log(data)
+  
   return (
    <div className="flex flex-col min-h-screen">
 

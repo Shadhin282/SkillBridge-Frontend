@@ -5,18 +5,25 @@ import { Input } from '@/components/ui/input';
 import { authClient} from '@/lib/auth-client';
 import { ArrowRight, Chrome } from 'lucide-react';
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
 import React, { FormEvent } from 'react';
+import { toast } from 'sonner';
 
 const LoginForm = () => {
-    const router = useRouter();
+
     
     const handleLogin = async (e: FormEvent<HTMLFormElement>)=>{
             e.preventDefault()
-            const data =  e.target;
-            
-          
-            const { data, error } = await authClient.signIn.email();
+            const email = (e.target as HTMLFormElement).elements.namedItem('email') as HTMLInputElement;
+            const password = (e.target as HTMLFormElement).elements.namedItem('password') as HTMLInputElement;
+            const loginData = {email : email.value,
+                password : password.value,
+            }
+            const { data,error } = await authClient.signIn.email(loginData);
+
+            if(error ){
+              toast.error("Login not successfull ")
+            }
+            toast.success("Login successfull")
     }
 
     const handleSocialLogin = async ()=>{
@@ -26,8 +33,8 @@ const LoginForm = () => {
   });
     }
 
-    const session = authClient.useSession()
-    console.log("session from client ",session)
+    // const session = authClient.useSession()
+    // console.log("session from client ",session)
     return (
         <div className="w-full max-w-2xl mx-auto text-center grid grid-cols-1  gap-8 lg:gap-12">
         {/* Left Column - Form */}
