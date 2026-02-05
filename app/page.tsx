@@ -3,8 +3,9 @@ import Link from "next/link";
 import { Search, CheckCircle, ArrowRight } from 'lucide-react';
 import { Input } from "@/components/ui/input";
 import { tutorService } from "@/services/tutor.service";
-import { TutorProfile } from "@/types";
+import { Category, TutorProfile } from "@/types";
 import { TutorCard } from "@/components/module/tutor/TutorCard";
+
 // import { userService } from "@/services/user.service";
 
 
@@ -15,7 +16,8 @@ export default async function Home() {
   //  console.log(data)
   const {data} = await tutorService.getTutorsPost();
   console.log(data)
-  
+  const {data : category} = await tutorService.getCategory();
+  console.log(category)
   return (
    <div className="flex flex-col min-h-screen">
 
@@ -71,20 +73,20 @@ export default async function Home() {
             Explore Categories
           </h2>
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
-            {/* {CATEGORIES.map((category) => (
+            {category.map((category : Category) => (
               <Link
                 key={category.id}
-                href={`/tutors?category=${category.slug}`}
+                href={`/tutors?category=${category.name}`}
                 className="group p-4 border rounded-lg hover:border-primary hover:shadow-md transition-all text-center">
 
                 <div className="font-medium text-gray-900 group-hover:text-primary">
                   {category.name}
                 </div>
                 <div className="text-sm text-gray-500 mt-1">
-                  {category.count} tutors
+                  {category._count.tutors} tutors
                 </div>
               </Link>
-            ))} */}
+            ))}
           </div>
         </div>
       </section>

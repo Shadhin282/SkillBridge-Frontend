@@ -3,9 +3,9 @@ import Link from 'next/link';
 import { Star, Clock } from 'lucide-react';
 import { TutorProfile } from '@/types';
 import { Card, CardContent, CardFooter, CardHeader } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { Badge } from '@/components/ui/badge';
 
 interface TutorCardProps {
     tutor: TutorProfile;
@@ -24,7 +24,7 @@ export function TutorCard({ tutor }: TutorCardProps) {
                     <h3 className="font-bold text-lg">{tutor.name}</h3>
                     <div className="flex items-center text-yellow-500 text-sm mt-1">
                         <Star className="w-4 h-4 fill-current" />
-                        <span className="ml-1 font-medium">{tutor.rating}</span>
+                        <span className="ml-1 font-medium">{tutor._count.review}</span>
                         <span className="text-muted-foreground ml-1">
                             ({tutor.reviewCount} reviews)
                         </span>
@@ -37,15 +37,15 @@ export function TutorCard({ tutor }: TutorCardProps) {
 
             <CardContent className="flex-1">
                 <div className="flex flex-wrap gap-2 mb-4">
-                    {/* {tutor.subjects.slice(0, 3).map((subject) => (
+                    {tutor.subjects.slice(0, 3).map((subject) => (
                         <Badge key={subject} variant="secondary">
                             {subject}
                         </Badge>
                     ))}
                     {tutor.subjects.length > 3 && (
                         <Badge variant="outline">+{tutor.subjects.length - 3}</Badge>
-                    )} */}
-                   { tutor.subjects}
+                    )}
+                   
                 </div>
 
                 <div className="flex items-center justify-between text-sm text-muted-foreground mt-4">
