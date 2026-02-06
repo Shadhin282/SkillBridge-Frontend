@@ -16,17 +16,17 @@ export function TutorCard({ tutor }: TutorCardProps) {
         <Card className="flex flex-col h-full hover:shadow-lg transition-shadow">
             <CardHeader className="flex flex-row gap-4">
                 <Avatar className="w-16 h-16 border-2 border-primary/10">
-                    <AvatarImage src={tutor.avatar} alt={tutor.name} className="object-cover" />
-                    <AvatarFallback>{tutor.name?.charAt(0)}</AvatarFallback>
+                    <AvatarImage src={tutor.user.image} alt={tutor.name} className="object-cover" />
+                    <AvatarFallback>{tutor.user.name?.charAt(0)}</AvatarFallback>
                 </Avatar>
 
                 <div>
-                    <h3 className="font-bold text-lg">{tutor.name}</h3>
+                    <h3 className="font-bold text-lg">{tutor.user.name}</h3>
                     <div className="flex items-center text-yellow-500 text-sm mt-1">
                         <Star className="w-4 h-4 fill-current" />
-                        <span className="ml-1 font-medium">{tutor._count.review}</span>
+                        <span className="ml-1 font-medium">{tutor.avgRating}</span>
                         <span className="text-muted-foreground ml-1">
-                            ({tutor.reviewCount} reviews)
+                            ({tutor._count.review} reviews)
                         </span>
                     </div>
                     <p className="text-sm text-muted-foreground mt-1 line-clamp-2">

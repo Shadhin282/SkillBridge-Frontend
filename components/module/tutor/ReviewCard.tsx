@@ -1,0 +1,40 @@
+
+import React from 'react';
+import { Star, User } from 'lucide-react';
+import { Review } from '@/types';
+import { Card, CardContent } from '@/components/ui/card';
+
+
+export function ReviewCard({ review }: {review:Review}) {
+    if(!review){
+        return 'no review'
+    }
+    return (
+        <Card>
+            <CardContent className="p-6">
+                <div className="flex justify-between items-start mb-2">
+                    <div className="flex items-center">
+                        <div className="h-8 w-8 rounded-full bg-primary/10 flex items-center justify-center mr-3">
+                            <User className="h-4 w-4 text-primary" />
+                        </div>
+                        <div>
+                            <div className="font-medium text-sm">reviewer name</div>
+                            <div className="text-xs text-muted-foreground">
+                                {new Date().toLocaleDateString()}
+                            </div>
+                        </div>
+                    </div>
+                    <div className="flex items-center text-yellow-500">
+                        {Array.from({ length: 5 }).map((_ , i : number ) => (
+                            <Star
+                                key={i}
+                                className={`w-4 h-4 ${i < review.rating  ? 'fill-current' : 'text-gray-300'}`}
+                            />
+                        ))}
+                    </div>
+                </div>
+                <p className="text-sm text-gray-600 mt-2">{review.comment}</p>
+            </CardContent>
+        </Card>
+    );
+}

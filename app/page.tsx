@@ -14,10 +14,15 @@ export default async function Home() {
   //  const {data} = await userService.getSession();
    
   //  console.log(data)
-  const {data} = await tutorService.getTutorsPost();
+  const {data} = await tutorService.getTutorsPost({
+    search: 'Physics',
+    price : 50,
+  },{
+    cache : 'no-store'
+  });
   console.log(data)
   const {data : category} = await tutorService.getCategory();
-  console.log(category)
+  // console.log(category)
   return (
    <div className="flex flex-col min-h-screen">
 
@@ -38,6 +43,7 @@ export default async function Home() {
               <Search className="absolute left-3 top-3 h-5 w-5 text-gray-400" />
               <Input
                 placeholder="What do you want to learn?"
+               
                 className="pl-10 border-0 shadow-none focus-visible:ring-0 text-lg h-12" />
 
             </div>

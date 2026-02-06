@@ -12,10 +12,15 @@ export interface TutorProfile {
     _count : {
         review : number
     };
+    user : {
+        image : string;
+        name : string;
+    };
+    avgRating : number;
     rating : number;
     reviewCount: number;
     availability: AvailabilitySlot[];
-    categories: string[];
+    categoryName: string;
 }
 
 export interface AvailabilitySlot {
@@ -31,4 +36,24 @@ export interface Category {
             tutors : number
         } 
 
+}
+
+export interface TutorSearchParams {
+        search ?: string;
+        category? : string;
+        price ?: number;
+        rating ?: number;
+}
+
+export interface ServiceOptions {
+    cache? : RequestCache;
+    revalidate? : number;
+}
+
+export interface Review {
+    id?: string;
+    rating?: number | undefined;
+    comment?: string | undefined;
+    tutorId : string ;
+    legnth : number;
 }
