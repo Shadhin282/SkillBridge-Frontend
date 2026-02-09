@@ -4,7 +4,7 @@ import { Avatar, AvatarFallback, AvatarImage } from '../ui/avatar';
 import { User } from '@/types';
 
 
-const UserCard = ({users}) => {
+const UserCard = ({users}:{users : User[]}) => {
     // console.log(users)
     return (
          <Card className="p-6">

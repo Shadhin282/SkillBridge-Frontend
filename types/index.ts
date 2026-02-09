@@ -1,11 +1,11 @@
-import { string } from "zod";
+
 
 export interface TutorProfile {
   id: string;
   userId: string;
   name: string;
   email: string;
-  role: "TUTOR";
+  role: string;
   avatar?: string;
   bio: string;
   subjects: string[];
@@ -17,6 +17,8 @@ export interface TutorProfile {
   user: {
     image: string;
     name: string;
+    role: string;
+    email : string;
   };
   avgRating: number;
   rating: number;
@@ -54,10 +56,16 @@ export interface ServiceOptions {
 
 export interface Review {
   id?: string;
-  rating?: number | undefined;
+  rating: number ;
   comment?: string | undefined;
   tutorId: string;
   legnth: number;
+  student : {
+    name : string;
+    image : string;
+  };
+  createdAt : Date;
+
 }
 
 export interface User {
@@ -77,4 +85,16 @@ export interface Booking {
   date: Date;
   status: string;
   createdAt: Date;
+  student : {
+    email : string;
+    name : string ;
+    image : string;
+
+  };
+  tutor : {
+    subjects : string;
+    user : {
+        name : string;
+    }
+  }
 }

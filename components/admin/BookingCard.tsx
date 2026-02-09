@@ -3,7 +3,7 @@ import { Card } from '../ui/card';
 import { Badge } from '../ui/badge';
 import { Booking } from '@/types';
 
-const BookingCard = ({bookings}) => {
+const BookingCard = ({bookings}:{bookings : Booking[]}) => {
     console.log("booking  ",bookings)
     return (
         <Card className="p-6">

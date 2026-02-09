@@ -1,3 +1,4 @@
+export const dynamic = "force-dynamic";
 import { tutorService } from '@/services/tutor.service';
 import { TutorProfile } from '@/types';
 import { TutorCard } from '@/components/module/tutor/TutorCard';

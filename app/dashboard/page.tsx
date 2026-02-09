@@ -1,30 +1,27 @@
+export const dynamic = "force-dynamic";
+
+
 import { BookOpen, Clock, Calendar, ArrowRight } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { userService } from '@/services/user.service';
 import Link from 'next/link';
+
+
 import { BookingService } from '@/services/booking.services';
 import { Booking } from '@/types';
+
+
 
 export default async function StudentDashboard() {
 
   const {data : session} = await userService.getSession()
   // console.log(session)
   const {data} = await userService.getUsersById(session.user.id)
-  console.log("get user data by id ", data)
+  // console.log("get user data by id ", data)
 
   const {data : booking} = await BookingService.getBooking();
-    console.log(booking)
-  const upcomingSessions = [
-    {
-      id: 1,
-      subject: 'Calculus',
-      tutor: 'Sarah Wilson',
-      date: '25/03/2024',
-      time: '14:00',
-      duration: '60 min',
-      status: 'CONFIRMED',
-    },
-  ];
+    // console.log(booking)
+  
 
   return (
     <>
@@ -109,7 +106,7 @@ export default async function StudentDashboard() {
                   </div>
                   <div className="flex items-center gap-2">
                     <Clock className="w-4 h-4" />
-                    {session?.time} ({session?.duration})
+                    {/* {session?.time} ({session?.duration}) */}
                   </div>
                 </div>
 

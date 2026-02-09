@@ -1,23 +1,22 @@
-'use client'
-import React, { useState } from 'react';
+import React from 'react';
 import { Star, Clock, MapPin, Shield, Check } from 'lucide-react';
-import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Card, CardContent } from '@/components/ui/card';
 import { ReviewCard } from '@/components/module/tutor/ReviewCard';
-import { BookingModal } from '@/components/module/booking/BookingModal';
-
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Review, TutorProfile } from '@/types';
-import { authClient} from '@/lib/auth-client';
+import BookingModals from './BookingModal';
+import ButtonModal from './ButtonModal';
+import { userService } from '@/services/user.service';
 
-const  TutorDetails = ({tutor, reviews}: {tutor: TutorProfile; reviews : Review}) => {
+const  TutorDetails = async ({tutor, reviews}: {tutor: TutorProfile; reviews : Review[]}) => {
 console.log("review details ", reviews )
-    const [isBookingModalOpen, setIsBookingModalOpen] = useState(false);
+    
 
 
-    const {data} = authClient.useSession()
-    const roleStudent = data?.user?.role as string == 'STUDENT';
+    const {data} = await userService.getSession()
+
+    const roleStudent = data?.user?.role  == 'STUDENT';
     console.log("detail User session ",data)
     return (
          <div>
@@ -137,13 +136,7 @@ console.log("review details ", reviews )
                                 </div>
 
                                { roleStudent  &&
-                                <Button
-                              
-                                    size="lg"
-                                    className="w-full text-lg h-12"
-                                    onClick={() => setIsBookingModalOpen(true)}>
-                                    Book a Session
-                                </Button>
+                                <ButtonModal></ButtonModal>
                                 }
 
                                 <p className="text-xs text-center text-gray-500">
@@ -173,11 +166,7 @@ console.log("review details ", reviews )
                 </div>
             </div>
 
-            <BookingModal
-                tutor={tutor}
-                isOpen={isBookingModalOpen}
-                onClose={() => setIsBookingModalOpen(false)}
-                onBook={(details) => console.log('Booked:', details)} />
+            <BookingModals tutor={tutor}></BookingModals>
 
          </div>
     );

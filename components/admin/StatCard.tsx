@@ -3,7 +3,7 @@ import { Card } from '../ui/card';
 import { BookOpen, DollarSign, Users } from 'lucide-react';
 
 const StatCard = ({totalBooking 
-,totalCategory  ,totalUser}) => {
+,totalCategory  ,totalUser}:{totalBooking: Number; totalCategory: Number; totalUser : Number}) => {
 
             const stats = [
     {
@@ -34,7 +34,7 @@ const StatCard = ({totalBooking
   ];
     return (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
-            {stats.map((stat, index) => {
+            {stats.map((stat , index) => {
               const Icon = stat.icon;
               return (
                 <Card key={index} className="p-6 hover:shadow-lg transition-shadow">
@@ -45,7 +45,7 @@ const StatCard = ({totalBooking
                       </p>
                       <div className="flex items-baseline gap-2">
                         <p className="text-3xl font-bold text-gray-900">
-                          {stat.value}
+                          {stat.value as number}
                         </p>
                       </div>
                       <p className="text-green-600 text-xs mt-2 font-medium">
