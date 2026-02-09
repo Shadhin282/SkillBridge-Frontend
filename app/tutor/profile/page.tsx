@@ -1,9 +1,10 @@
+import TutorProfileForm from '@/components/module/tutor/TutorProfileForm';
 import React from 'react';
 
 const page = () => {
     return (
         <div>
-            tutor profile
+          <TutorProfileForm></TutorProfileForm>
         </div>
     );
 };

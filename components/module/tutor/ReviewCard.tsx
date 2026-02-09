@@ -3,6 +3,7 @@ import React from 'react';
 import { Star, User } from 'lucide-react';
 import { Review } from '@/types';
 import { Card, CardContent } from '@/components/ui/card';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 
 
 export function ReviewCard({ review }: {review:Review}) {
@@ -15,12 +16,16 @@ export function ReviewCard({ review }: {review:Review}) {
                 <div className="flex justify-between items-start mb-2">
                     <div className="flex items-center">
                         <div className="h-8 w-8 rounded-full bg-primary/10 flex items-center justify-center mr-3">
-                            <User className="h-4 w-4 text-primary" />
+                            {/* <User className="h-4 w-4 text-primary" /> */}
+                            <Avatar className=" border-4 border-white shadow-lg">
+                                    <AvatarImage src={review.student.image} alt={review.student.name} className="object-cover" />
+                                    <AvatarFallback>{review.student.name.charAt(0)}</AvatarFallback>
+                                </Avatar>
                         </div>
                         <div>
-                            <div className="font-medium text-sm">reviewer name</div>
+                            <div className="font-medium text-sm">{review.student.name}</div>
                             <div className="text-xs text-muted-foreground">
-                                {new Date().toLocaleDateString()}
+                                {new Date(review.createdAt).toLocaleDateString()}
                             </div>
                         </div>
                     </div>

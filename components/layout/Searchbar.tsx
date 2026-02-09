@@ -13,10 +13,6 @@ const Searchbar = () => {
   const searchValue = e.target.value;
   setValue(searchValue);
 
-//   const params = new URLSearchParams(window.location.search);
-
-//   params.set('search', searchValue);
-
   router.push(`/tutors?search=${value}`);
 };
     return (

@@ -7,6 +7,7 @@ import { Input } from '@/components/ui/input'
 import { ArrowRight, Chrome, Facebook, Apple, Eye, EyeOff } from 'lucide-react'
 import { authClient } from '@/lib/auth-client';
 import { toast } from 'sonner';
+import {Field, useForm} from '@tanstack/react-form'
 import {
   Select,
   SelectContent,
@@ -14,32 +15,67 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select"
+import * as z from 'zod';
 
+
+const formSchema = z.object({
+  name : z.string().min(1, "This "),
+  email : z.email(),
+  password : z.string(),
+  image : z.string(),
+  role : z.string()
+})
 
 
 const RegisterForm = () => {
     const [showPassword, setShowPassword] = useState<boolean>(false)
-    
-    const handleRegistration = async (e: FormEvent<HTMLFormElement>)=>{
-            e.preventDefault()
-            const name = (e.target as HTMLFormElement).elements.namedItem('name') as HTMLInputElement;
-            const email = (e.target as HTMLFormElement).elements.namedItem('email') as HTMLInputElement;
-            const password = (e.target as HTMLFormElement).elements.namedItem('password') as HTMLInputElement;
-            const role = (e.target as HTMLFormElement).elements.namedItem('role') as HTMLInputElement;
-            const registerData = {
-                name : name.value,
-                email : email.value,
-                password : password.value,
-                role : role.value
+    const form = useForm({
+      defaultValues : {
+        name : '',
+        email : '',
+        password : '',
+        image : '',
+        role : ''
+      },
+      validators: {
+        onSubmit : formSchema
+      },
+      onSubmit : async ({value}) => {
+        const toastId = toast.loading("Creating User")
+        try {
+            const { data,error } = await authClient.signUp.email(value);
+            if(error){
+              toast.error(error.message,{id : toastId})
+              return
             }
-            // console.log(loginData)
-            const { data,error } = await authClient.signUp.email(registerData);
+            toast.success("Form Submitted Successfully")
+        } catch (error) {
+          toast.error("Something wrong", {id : toastId})
+        }
+            
+            console.log("form data ", value)
+      }
+    })
+    // const handleRegistration = async (e: FormEvent<HTMLFormElement>)=>{
+    //         e.preventDefault()
+    //         const name = (e.target as HTMLFormElement).elements.namedItem('name') as HTMLInputElement;
+    //         const email = (e.target as HTMLFormElement).elements.namedItem('email') as HTMLInputElement;
+    //         const password = (e.target as HTMLFormElement).elements.namedItem('password') as HTMLInputElement;
+    //         const role = (e.target as HTMLFormElement).elements.namedItem('role') as HTMLInputElement;
+    //         const registerData = {
+    //             name : name.value,
+    //             email : email.value,
+    //             password : password.value,
+    //             role : role.value
+    //         }
+    //         // console.log(loginData)
+    //         const { data,error } = await authClient.signUp.email(registerData);
 
-            if(error ){
-              toast.error("Account Not Created")
-            }
-            toast.success("Account has created successfully.")
-    }
+    //         if(error ){
+    //           toast.error("Account Not Created")
+    //         }
+    //         toast.success("Account has created successfully.")
+    // }
 
     const handleSocialLogin = async ()=>{
         const data = await authClient.signIn.social({
@@ -68,38 +104,63 @@ const RegisterForm = () => {
             </div>
 
             {/* Form */}
-            <form onSubmit={(e)=>handleRegistration(e)} className="space-y-4">
-              <div className="space-y-2">
+            <form onSubmit={(e)=>{
+                e.preventDefault()
+              form.handleSubmit()}} className="space-y-4">
+       
+                <form.Field
+                  name='name' 
+                  children={(field)=> {
+                    const isInvalid =
+          field.state.meta.isTouched && !field.state.meta.isValid
+                    return (
+                    <div className="space-y-2">
                 <Input
                   type="text"
                   name="name"
                   placeholder="Full Name"
-                //   value={formData.fullName}
-                //   onChange={handleChange}
+                 value={field.state.value}
+                  onChange={(e)=> field.handleChange(e.target.value)}
                   className="h-12 rounded-full px-6 text-base"
                   required
                 />
+                {/* {isInvalid &&  ( <p>{field.state.meta.errors}</p> )} */}
               </div>
-
-              <div className="space-y-2">
+                  )
+                  }
+                   }
+                />
+                
+                <form.Field
+                  name='email' 
+                  children={(field)=> {
+                    return (
+                    <div className="space-y-2">
                 <Input
                   type="email"
                   name="email"
                   placeholder="Email Address"
-                //   value={formData.email}
-                //   onChange={handleChange}
+                  value={field.state.value}
+                  onChange={(e)=>field.handleChange(e.target.value)}
                   className="h-12 rounded-full px-6 text-base"
                   required
                 />
               </div>
-
-              <div className="space-y-2 relative">
+                  )
+                  }
+                   }
+                />
+                <form.Field
+                  name='password' 
+                  children={(field)=> {
+                    return (
+                     <div className="space-y-2 relative">
                 <Input
                   type={showPassword ? 'text' : 'password'}
                   name="password"
                   placeholder="Password"
-                //   value={formData.password}
-                //   onChange={handleChange}
+                  value={field.state.value}
+                  onChange={(e)=>field.handleChange(e.target.value)}
                   className="h-12 rounded-full px-6 text-base pr-12"
                   required
                 />
@@ -111,10 +172,39 @@ const RegisterForm = () => {
                   {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
                 </button>
               </div>
+                  )
+                  }
+                   }
+                />
 
-              <div className="space-y-2 relative">
+                 <form.Field
+                  name='image' 
+                  children={(field)=> {
+                    return (
+                    <div className="space-y-2">
+                <Input
+                  type="file"
+                  name="image"
+                  placeholder="Photo"
+                  value={field.state.value}
+                  onChange={(e)=>field.handleChange(e.target.value)}
+                  className="h-12 rounded-full px-6 text-base"
+                  required
+                />
+              </div>
+                  )
+                  }
+                   }
+                />
+                <form.Field
+                  name='role' 
+                  children={(field)=> {
+                    return (
+                     <div className="space-y-2 relative">
                <Select
-  name="role"
+   name='role'
+          value={field.state.value}
+          onValueChange={field.handleChange}
   required
 >
   <SelectTrigger className="h-12 rounded-full px-6 text-base">
@@ -122,12 +212,23 @@ const RegisterForm = () => {
   </SelectTrigger>
 
   <SelectContent>
-    <SelectItem value="STUDENT">STUDENT</SelectItem>
-    <SelectItem value="TUTOR">TUTOR</SelectItem>
+    <SelectItem value='STUDENT' >STUDENT</SelectItem>
+    <SelectItem value='TUTOR'>TUTOR</SelectItem>
   </SelectContent>
 </Select>
                 
               </div>
+                  )
+                  }
+                   }
+                />
+             
+
+             
+
+             
+
+             
 
               <Button
                 type="submit"
@@ -163,6 +264,7 @@ const RegisterForm = () => {
 
           <Button
             // onClick={() => handleSocialLogin('facebook')}
+            disabled
             className="h-12 rounded-full border border-border bg-background hover:bg-muted text-foreground font-semibold text-base flex items-center justify-center gap-3"
           >
             <Facebook className="w-5 h-5" />
@@ -170,6 +272,7 @@ const RegisterForm = () => {
           </Button>
 
           <Button
+          disabled
             // onClick={() => handleSocialLogin('apple')}\
             className="h-12 rounded-full border border-border bg-background hover:bg-muted text-foreground font-semibold text-base flex items-center justify-center gap-3"
           >

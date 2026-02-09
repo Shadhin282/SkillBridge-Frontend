@@ -9,14 +9,16 @@ import { BookingModal } from '@/components/module/booking/BookingModal';
 
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Review, TutorProfile } from '@/types';
+import { authClient} from '@/lib/auth-client';
 
 const  TutorDetails = ({tutor, reviews}: {tutor: TutorProfile; reviews : Review}) => {
-console.log("review details ", reviews.length )
+console.log("review details ", reviews )
     const [isBookingModalOpen, setIsBookingModalOpen] = useState(false);
 
 
-    
-
+    const {data} = authClient.useSession()
+    const roleStudent = data?.user?.role as string == 'STUDENT';
+    console.log("detail User session ",data)
     return (
          <div>
 
@@ -45,7 +47,7 @@ console.log("review details ", reviews.length )
                                             <div className="flex items-center gap-4 mt-3 text-sm text-gray-500">
                                                 <div className="flex items-center text-yellow-500 font-medium">
                                                     <Star className="w-4 h-4 fill-current mr-1" />
-                                                    {tutor.rating} ({tutor.reviewCount} reviews)
+                                                    {tutor.avgRating} ({tutor._count.review} reviews)
                                                 </div>
                                                 <div className="flex items-center">
                                                     <MapPin className="w-4 h-4 mr-1" />
@@ -134,12 +136,15 @@ console.log("review details ", reviews.length )
                                     </div>
                                 </div>
 
+                               { roleStudent  &&
                                 <Button
+                              
                                     size="lg"
                                     className="w-full text-lg h-12"
                                     onClick={() => setIsBookingModalOpen(true)}>
                                     Book a Session
                                 </Button>
+                                }
 
                                 <p className="text-xs text-center text-gray-500">
                                     100% Satisfaction Guaranteed

@@ -3,6 +3,7 @@ import { cookies } from "next/headers";
 
 
 const AUTH_URL = env.AUTH_URL;
+const BACKEND_API = env.BACKEND_API;
 
 export const userService = {
 
@@ -38,4 +39,46 @@ export const userService = {
       };
     }
   },
+  getStats : async function (){
+    const cookieStore = await cookies();
+          try {
+            const res = await fetch(`${BACKEND_API}/admin/stats`,{
+              headers: {
+                Cookie : cookieStore.toString(),
+              },
+            })
+
+            const stats = await res.json();
+
+            return { data: stats, error: null };
+          } catch (error) {
+             console.log(error);
+
+      return {
+        data: null,
+        error: { message: "Something went wrong during get cookie" },
+      };
+          }
+  },
+
+  getUsers : async function (){
+     const cookieStore = await cookies();
+      try {
+        const res = await fetch(`${BACKEND_API}/admin/users`,{
+          headers : {
+            Cookie : cookieStore.toString(),
+          }
+        })
+        const data = await res.json();
+
+        return { data, error: null };
+      } catch (error) {
+            console.log(error);
+
+      return {
+        data: null,
+        error: { message: "Something went wrong during get cookie" },
+      };
+      }
+  }
 };
