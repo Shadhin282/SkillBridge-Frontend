@@ -31,11 +31,11 @@ export default function NavbarClient({ user }: { user: User | null }) {
       {user ? (
         <>
           <Avatar className="w-9 h-9">
-            <AvatarImage src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&h=400&fit=crop" />
-            <AvatarFallback>Alex </AvatarFallback>
+            <AvatarImage src={user.image} />
+            <AvatarFallback>{user.name} </AvatarFallback>
           </Avatar>
             <span className="text-sm font-medium text-gray-900">
-                      Alex Johnson
+                      {user.name}
                     </span>
           <Button variant="ghost" onClick={handleSignOut}>
             Logout

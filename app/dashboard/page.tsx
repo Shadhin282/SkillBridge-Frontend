@@ -1,10 +1,19 @@
-'use client';
-
 import { BookOpen, Clock, Calendar, ArrowRight } from 'lucide-react';
-// import UserNavbar from '@/components/user-navbar';
 import { Button } from '@/components/ui/button';
+import { userService } from '@/services/user.service';
+import Link from 'next/link';
+import { BookingService } from '@/services/booking.services';
+import { Booking } from '@/types';
 
-export default function StudentDashboard() {
+export default async function StudentDashboard() {
+
+  const {data : session} = await userService.getSession()
+  // console.log(session)
+  const {data} = await userService.getUsersById(session.user.id)
+  console.log("get user data by id ", data)
+
+  const {data : booking} = await BookingService.getBooking();
+    console.log(booking)
   const upcomingSessions = [
     {
       id: 1,
@@ -39,7 +48,7 @@ export default function StudentDashboard() {
               <h3 className="text-gray-600 text-sm font-medium">Total Sessions</h3>
               <BookOpen className="w-6 h-6 text-gray-400" />
             </div>
-            <div className="text-3xl font-bold text-gray-900 mb-2">1</div>
+            <div className="text-3xl font-bold text-gray-900 mb-2">{data.data.booking?.status == 'COMPLETED' ? data.data.booking?.length : "No Session Completed"}</div>
             <p className="text-sm text-gray-500">Completed lessons</p>
           </div>
 
@@ -49,7 +58,7 @@ export default function StudentDashboard() {
               <h3 className="text-gray-600 text-sm font-medium">Hours Learned</h3>
               <Clock className="w-6 h-6 text-gray-400" />
             </div>
-            <div className="text-3xl font-bold text-gray-900 mb-2">1</div>
+            <div className="text-3xl font-bold text-gray-900 mb-2"></div>
             <p className="text-sm text-gray-500">Total time spent learning</p>
           </div>
 
@@ -59,7 +68,7 @@ export default function StudentDashboard() {
               <h3 className="text-gray-600 text-sm font-medium">Upcoming</h3>
               <Calendar className="w-6 h-6 text-gray-400" />
             </div>
-            <div className="text-3xl font-bold text-gray-900 mb-2">1</div>
+            <div className="text-3xl font-bold text-gray-900 mb-2">{data.data.booking?.status =='CONFIRMED' ? new Date(data.data.booking?.date).toISOString().split('T')[0] : "No session"}</div>
             <p className="text-sm text-gray-500">Scheduled sessions</p>
           </div>
         </div>
@@ -74,7 +83,7 @@ export default function StudentDashboard() {
           </div>
 
           <div className="space-y-4">
-            {upcomingSessions.map((session) => (
+            {booking.data.map((session:Booking) => (
               <div
                 key={session.id}
                 className="bg-white border border-gray-200 rounded-lg p-6"
@@ -82,10 +91,10 @@ export default function StudentDashboard() {
                 <div className="flex items-start justify-between mb-4">
                   <div>
                     <h3 className="text-lg font-bold text-gray-900 mb-1">
-                      {session.subject}
+                      {session.tutor.subjects[0]}
                     </h3>
                     <p className="text-sm text-gray-600 flex items-center gap-1">
-                      <span>👤</span> with {session.tutor}
+                      <span>👤</span> with {session.tutor.user.name}
                     </p>
                   </div>
                   <span className="bg-gray-900 text-white text-xs font-semibold px-3 py-1 rounded-full">
@@ -96,11 +105,11 @@ export default function StudentDashboard() {
                 <div className="flex items-center gap-8 text-sm text-gray-600 mb-4">
                   <div className="flex items-center gap-2">
                     <Calendar className="w-4 h-4" />
-                    {session.date}
+                    {new Date(session.date).toISOString().split('T')[0]}
                   </div>
                   <div className="flex items-center gap-2">
                     <Clock className="w-4 h-4" />
-                    {session.time} ({session.duration})
+                    {session?.time} ({session?.duration})
                   </div>
                 </div>
 
@@ -116,12 +125,16 @@ export default function StudentDashboard() {
         <div className="bg-gray-50 border border-gray-200 rounded-lg p-8">
           <h2 className="text-xl font-bold text-gray-900 mb-4">Quick Actions</h2>
           <div className="flex flex-col sm:flex-row gap-4">
-            <Button className="bg-gray-900 text-white hover:bg-gray-800">
+            <Link href={'/tutors'}>
+              <Button className="bg-gray-900 text-white hover:bg-gray-800">
               Browse Tutors
             </Button>
+            </Link>
+            <Link href={'/dashboard/profile'}>
             <Button variant="outline" className="border-gray-300 bg-transparent">
               Edit Profile
             </Button>
+            </Link>
           </div>
         </div>
       </main>
