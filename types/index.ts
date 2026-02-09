@@ -37,6 +37,7 @@ export interface Category {
   _count: {
     tutors: number;
   };
+  description : string;
 }
 
 export interface TutorSearchParams {
