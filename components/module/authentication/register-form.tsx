@@ -5,7 +5,7 @@ import Link from 'next/link'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { ArrowRight, Chrome, Facebook, Apple, Eye, EyeOff } from 'lucide-react'
-import { authClient } from '@/lib/auth-client';
+import { authClient, signIn } from '@/lib/auth-client';
 import { toast } from 'sonner';
 import {Field, useForm} from '@tanstack/react-form'
 import {
@@ -84,7 +84,7 @@ const RegisterForm = () => {
     // }
 
     const handleSocialLogin = async ()=>{
-        const data = await authClient.signIn.social({
+       await signIn.social({
     provider: "google",
     callbackURL: "https://skillbridge-two-flame.vercel.app",
   });
