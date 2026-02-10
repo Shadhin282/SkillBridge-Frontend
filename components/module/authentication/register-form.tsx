@@ -27,9 +27,12 @@ const formSchema = z.object({
   role : z.string()
 })
 
-const router = useRouter();
+
 
 const RegisterForm = () => {
+
+  const router = useRouter();
+  
     const [showPassword, setShowPassword] = useState<boolean>(false)
     const form = useForm({
       defaultValues : {

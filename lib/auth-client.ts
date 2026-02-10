@@ -7,3 +7,6 @@ export const authClient = createAuthClient({
 
 
 export const { signIn, signUp,signOut, useSession } = createAuthClient()
+
+
+  // 'https://skill-bridge-orpin.vercel.app'
