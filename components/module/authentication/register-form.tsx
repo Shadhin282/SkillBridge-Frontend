@@ -86,7 +86,7 @@ const RegisterForm = () => {
     const handleSocialLogin = async ()=>{
         const data = await authClient.signIn.social({
     provider: "google",
-    callbackURL: "https://skillbridge-two-flame.vercel.app/",
+    callbackURL: "https://skillbridge-two-flame.vercel.app",
   });
     }
 
