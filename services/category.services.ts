@@ -6,7 +6,7 @@ const BACKEND_API = env.BACKEND_API;
 
 export const categoryService = {
     getCategory : async function () {
-        const cookieStore = cookies();
+        const cookieStore = await cookies();
         try {
             const res = await fetch(`${BACKEND_API}/categories`,{
           headers : {

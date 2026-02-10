@@ -12,7 +12,7 @@ export const userService = {
 
     try {
 
-      const cookieStore = cookies();
+      const cookieStore = await cookies();
 
       const res = await fetch(`${AUTH_URL}/get-session`, {
         headers: {
@@ -41,7 +41,7 @@ export const userService = {
     }
   },
   getStats : async function (){
-    const cookieStore =  cookies();
+    const cookieStore = await cookies();
           try {
             const res = await fetch(`${BACKEND_API}/admin/stats`,{
               headers: {
@@ -63,7 +63,7 @@ export const userService = {
   },
 
   getUsers : async function (){
-   const cookieStore =  cookies();
+   const cookieStore = await cookies();
       try {
         const res = await fetch(`${BACKEND_API}/admin/users`,{
           headers : {
@@ -83,7 +83,7 @@ export const userService = {
       }
   },
   getUsersById : async function (id: string){
-    const cookieStore =  cookies();
+    const cookieStore = await cookies();
         try {
           const res = await fetch(`${BACKEND_API}/admin/users/${id}`,{
           headers : {
