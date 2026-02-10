@@ -19,7 +19,7 @@ export default async function Navbar() {
     const { data } = await userService.getSession();
 
     const user = data?.user;
-    // console.log(user)
+    console.log(user)
  
   const navItems = [
     { label: "Browse Tutors", href: "/tutors" },

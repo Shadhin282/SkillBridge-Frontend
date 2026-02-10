@@ -14,5 +14,6 @@ export const env = createEnv({
          BACKEND_API : process.env.BACKEND_API,
         BACKEND_URL : process.env.BACKEND_URL,
         AUTH_URL : process.env.AUTH_URL,
+       
     }
 })

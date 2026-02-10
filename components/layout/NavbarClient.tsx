@@ -20,6 +20,7 @@ export default function NavbarClient({ user }: { user: User | null }) {
   const handleSignOut = async () => {
     await authClient.signOut({
       fetchOptions: {
+        cache: 'no-cache',
         onSuccess: () => {
           toast.success("Logout Successfully")
           router.push("/login");
