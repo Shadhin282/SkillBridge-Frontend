@@ -37,18 +37,14 @@ export const proxy = async (request : NextRequest)=>{
         return NextResponse.redirect(new URL('/login', request.url))
     }
 
-      // Skip middleware for verify-email route
-//   if (pathname.startsWith("/verify-email")) {
-//     return NextResponse.next();
-//   }
-
-  // Check for session token in cookies
-//   const sessionToken = request.cookies.get("better-auth.session_token");
+   // Check for session token in cookies
+  const sessionToken = request.cookies.get("better-auth.session_token");
 
   //* User is not authenticated at all
-//   if (!sessionToken) {
-//     return NextResponse.redirect(new URL("/login", request.url));
-//   }
+  if (!sessionToken) {
+    return NextResponse.redirect(new URL("/login", request.url));
+  }
+
 
 
         return NextResponse.next()

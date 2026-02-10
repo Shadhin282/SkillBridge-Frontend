@@ -5,6 +5,7 @@ import { BookOpen, Clock, Calendar, ArrowRight } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { userService } from '@/services/user.service';
 import Link from 'next/link';
+import { redirect } from 'next/navigation';
 
 
 import { BookingService } from '@/services/booking.services';
@@ -14,14 +15,19 @@ import { Booking } from '@/types';
 
 export default async function StudentDashboard() {
 
-  const {data : session} = await userService.getSession()
+  const { data: session } = await userService.getSession()
+
+  if (!session?.user) {
+    redirect('/login');
+  }
+
   // console.log(session)
-  const {data} = await userService.getUsersById(session.user.id)
+  const { data } = await userService.getUsersById(session.user.id)
   // console.log("get user data by id ", data)
 
-  const {data : booking} = await BookingService.getBooking();
-    // console.log(booking)
-  
+  const { data: booking } = await BookingService.getBooking();
+  // console.log(booking)
+
 
   return (
     <>
@@ -65,7 +71,7 @@ export default async function StudentDashboard() {
               <h3 className="text-gray-600 text-sm font-medium">Upcoming</h3>
               <Calendar className="w-6 h-6 text-gray-400" />
             </div>
-            <div className="text-3xl font-bold text-gray-900 mb-2">{data.data.booking?.status =='CONFIRMED' ? new Date(data.data.booking?.date).toISOString().split('T')[0] : "No session"}</div>
+            <div className="text-3xl font-bold text-gray-900 mb-2">{data.data.booking?.status == 'CONFIRMED' ? new Date(data.data.booking?.date).toISOString().split('T')[0] : "No session"}</div>
             <p className="text-sm text-gray-500">Scheduled sessions</p>
           </div>
         </div>
@@ -80,7 +86,7 @@ export default async function StudentDashboard() {
           </div>
 
           <div className="space-y-4">
-            {booking.data.map((session:Booking) => (
+            {booking.data.map((session: Booking) => (
               <div
                 key={session.id}
                 className="bg-white border border-gray-200 rounded-lg p-6"
@@ -124,13 +130,13 @@ export default async function StudentDashboard() {
           <div className="flex flex-col sm:flex-row gap-4">
             <Link href={'/tutors'}>
               <Button className="bg-gray-900 text-white hover:bg-gray-800">
-              Browse Tutors
-            </Button>
+                Browse Tutors
+              </Button>
             </Link>
             <Link href={'/dashboard/profile'}>
-            <Button variant="outline" className="border-gray-300 bg-transparent">
-              Edit Profile
-            </Button>
+              <Button variant="outline" className="border-gray-300 bg-transparent">
+                Edit Profile
+              </Button>
             </Link>
           </div>
         </div>

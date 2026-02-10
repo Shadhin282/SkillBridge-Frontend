@@ -1,5 +1,6 @@
 // import AdminNavbar from '@/components/admin-navbar';
 
+import { redirect } from 'next/navigation';
 import BookingCard from '@/components/admin/BookingCard';
 import StatCard from '@/components/admin/StatCard';
 import UserCard from '@/components/admin/UserCard';
@@ -8,14 +9,18 @@ import { userService } from '@/services/user.service';
 export default async function AdminDashboard() {
 
 
-  const {data : stats } = await userService.getStats();
-  // console.log(stats)
-  const { users,bookings,
-totalBooking 
-,totalCategory  ,totalUser
-} = stats.data 
+  const { data: stats } = await userService.getStats();
 
-// console.log(totalBooking,totalUser,totalCategory)
+  if (!stats?.data) {
+    redirect('/login');
+  }
+
+  const { users, bookings,
+    totalBooking
+    , totalCategory, totalUser
+  } = stats.data
+
+  // console.log(totalBooking,totalUser,totalCategory)
   return (
     <>
       {/* <AdminNavbar /> */}
@@ -27,12 +32,12 @@ totalBooking
           </div>
 
           {/* Stats Cards */}
-            <StatCard totalBooking={totalBooking} totalUser={totalUser} totalCategory={totalCategory}></StatCard>
+          <StatCard totalBooking={totalBooking} totalUser={totalUser} totalCategory={totalCategory}></StatCard>
 
           {/* Recent Activity */}
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
             {/* Recent Registrations */}
-           <UserCard users={users}></UserCard>
+            <UserCard users={users}></UserCard>
 
             {/* Recent Bookings */}
             <BookingCard bookings={bookings}></BookingCard>
