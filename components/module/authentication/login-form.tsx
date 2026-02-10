@@ -5,11 +5,15 @@ import { Input } from '@/components/ui/input';
 import { authClient} from '@/lib/auth-client';
 import { ArrowRight, Chrome } from 'lucide-react';
 import Link from 'next/link';
-import React, { FormEvent } from 'react';
+import { redirect } from 'next/navigation';
+import { FormEvent } from 'react';
 import { toast } from 'sonner';
+import { useRouter } from 'next/navigation';
+
 
 const LoginForm = () => {
 
+    const router = useRouter()
     
     const handleLogin = async (e: FormEvent<HTMLFormElement>)=>{
             e.preventDefault()
@@ -19,12 +23,18 @@ const LoginForm = () => {
                 password : password.value,
             }
             console.log(loginData)
-            const { data,error } = await authClient.signIn.email(loginData);
+            try {
+              const { data,error } = await authClient.signIn.email(loginData);
 
             if(error ){
               toast.error("Login not successfull ")
             }
             toast.success("Login successfull")
+            router.push('/')
+            } catch (error) {
+              console.error(error)
+              
+            }
     }
 
     const handleSocialLogin = async ()=>{

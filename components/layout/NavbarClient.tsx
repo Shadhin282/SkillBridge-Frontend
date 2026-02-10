@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { authClient } from "@/lib/auth-client";
 import { useRouter } from "next/navigation";
+import { toast } from "sonner";
 
 interface User {
   id: string;
@@ -20,6 +21,7 @@ export default function NavbarClient({ user }: { user: User | null }) {
     await authClient.signOut({
       fetchOptions: {
         onSuccess: () => {
+          toast.success("Logout Successfully")
           router.push("/login");
         },
       },

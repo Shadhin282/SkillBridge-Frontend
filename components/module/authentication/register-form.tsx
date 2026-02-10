@@ -16,6 +16,7 @@ import {
   SelectValue,
 } from "@/components/ui/select"
 import * as z from 'zod';
+import { useRouter } from 'next/navigation';
 
 
 const formSchema = z.object({
@@ -26,6 +27,7 @@ const formSchema = z.object({
   role : z.string()
 })
 
+const router = useRouter();
 
 const RegisterForm = () => {
     const [showPassword, setShowPassword] = useState<boolean>(false)
@@ -49,6 +51,7 @@ const RegisterForm = () => {
               return
             }
             toast.success("Form Submitted Successfully")
+            router.push('/')
         } catch (error) {
           toast.error("Something wrong", {id : toastId})
         }

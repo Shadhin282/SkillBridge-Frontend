@@ -1,4 +1,4 @@
-export const dynamic = "force-dynamic";
+
 
 
 import { BookOpen, Clock, Calendar, ArrowRight } from 'lucide-react';

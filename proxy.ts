@@ -25,6 +25,7 @@ export const proxy = async (request : NextRequest)=>{
         return NextResponse.redirect(new URL('/login', request.url))
     }
 
+
     if(!isAdmin && pathname.startsWith('/admin')){
         return NextResponse.redirect(new URL('/login', request.url))
     }
@@ -37,13 +38,6 @@ export const proxy = async (request : NextRequest)=>{
         return NextResponse.redirect(new URL('/login', request.url))
     }
 
-   // Check for session token in cookies
-  const sessionToken = request.cookies.get("better-auth.session_token");
-
-  //* User is not authenticated at all
-  if (!sessionToken) {
-    return NextResponse.redirect(new URL("/login", request.url));
-  }
 
 
 
